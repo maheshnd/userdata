@@ -24,13 +24,6 @@ export const CreateUser = () => {
 
     // Email format validation using regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        email: "Invalid email format",
-      }));
-      return;
-    }
 
     if (!firstName || !lastName || !email) {
       setErrors({
@@ -38,6 +31,13 @@ export const CreateUser = () => {
         lastName: lastName ? "" : "Last name is required",
         email: email ? "" : "Email is required",
       });
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Invalid email format",
+      }));
       return;
     }
 
