@@ -6,9 +6,11 @@ import {
   setCurrentAction,
   setCurrentSelectedUser,
 } from "../../store/user/slice";
+import { getCurrentSelectedUser } from "../../selectors/getCurrentSelectedUser";
 export const DeleteUser = () => {
   const dispatch = useDispatch();
   const shouldOpen = useSelector(shouldOpenDeletePopup);
+  const currentUser = useSelector(getCurrentSelectedUser);
   const handleClose = () => {
     dispatch(setCurrentSelectedUser(""));
     dispatch(setCurrentAction(""));
@@ -21,7 +23,7 @@ export const DeleteUser = () => {
       <Modal.Header closeButton>
         <Modal.Title>Confirm Deletion</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
+      <Modal.Body>{`Are you sure you want to delete ${currentUser} user?`}</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
           Cancel
