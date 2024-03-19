@@ -1,30 +1,28 @@
-import React, { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import React from "react";
+import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { handleDelete, setCurrentSelectedUser } from "../../store/user/slice";
+import {
+  setCurrentAction,
+  setCurrentSelectedUser,
+  setMessage,
+} from "../../store/user/slice";
+import { getUserList } from "../../selectors/getUserList";
 
 export const TableData = () => {
   const dispatch = useDispatch();
-  const users = useSelector((state) => state?.user?.Users);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
+
+  const users = useSelector(getUserList);
 
   const handleEdit = (user) => {
     dispatch(setCurrentSelectedUser(user));
+    dispatch(setCurrentAction("Edit"));
+    dispatch(setMessage(""));
   };
 
   const handleDeleteUser = (user) => {
-    setUserToDelete(user);
-    setShowConfirmation(true);
-  };
-
-  const confirmDelete = () => {
-    dispatch(handleDelete(userToDelete));
-    setShowConfirmation(false);
-  };
-
-  const cancelDelete = () => {
-    setShowConfirmation(false);
+    dispatch(setCurrentSelectedUser(user));
+    dispatch(setCurrentAction("Delete"));
+    dispatch(setMessage(""));
   };
 
   return (
@@ -47,22 +45,6 @@ export const TableData = () => {
           </td>
         </tr>
       ))}
-
-      {/* Confirmation Modal */}
-      <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Deletion</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={cancelDelete}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={confirmDelete}>
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </tbody>
   );
 };

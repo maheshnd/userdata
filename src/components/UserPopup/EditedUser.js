@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { handleUpdate, setCurrentSelectedUser } from "../../store/user/slice";
+import {
+  handleUpdate,
+  setCurrentAction,
+  setCurrentSelectedUser,
+} from "../../store/user/slice";
+import { getCurrentSelectedUser } from "../../selectors/getCurrentSelectedUser";
+import { getUserList } from "../../selectors/getUserList";
+import { shouldOpenEditPopup } from "../../selectors/shouldOpenEditPopup";
 
 export const EditedUser = () => {
   const dispatch = useDispatch();
-  const userState = useSelector((state) => state.user);
-  const currentSelectedUser = userState.currentSelectedUser;
+  const userList = useSelector(getUserList);
+  const shouldOpen = useSelector(shouldOpenEditPopup);
+  const currentSelectedUser = useSelector(getCurrentSelectedUser);
   const [editedUser, setEditedUser] = useState({});
   useEffect(() => {
-    const editedUser = userState?.Users?.find(
+    const editedUser = userList?.find(
       (user) => user.email === currentSelectedUser
     );
     if (editedUser) {
       setEditedUser({ ...editedUser });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSelectedUser]);
 
   const handleChange = (e) => {
@@ -29,10 +38,11 @@ export const EditedUser = () => {
 
   const handleClose = () => {
     dispatch(setCurrentSelectedUser(""));
+    dispatch(setCurrentAction(""));
   };
 
   return (
-    <Modal show={!!currentSelectedUser} onHide={handleClose}>
+    <Modal show={shouldOpen} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Edit User</Modal.Title>
       </Modal.Header>

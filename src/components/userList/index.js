@@ -2,8 +2,9 @@ import { Row, Col, Table } from "react-bootstrap";
 import { UserListHeader } from "./Header";
 import { TableData } from "./TableData";
 import { useSelector } from "react-redux";
+import { getUserList } from "../../selectors/getUserList";
 export const UserList = () => {
-  const userData = useSelector((state) => state.user.Users);
+  const userData = useSelector(getUserList);
   if (!userData?.length) {
     return null;
   }

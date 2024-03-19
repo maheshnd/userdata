@@ -1,9 +1,10 @@
-import { updateUser } from "../slice";
+import { getUserList } from "../../../selectors/getUserList";
+import { setMessage, updateUser } from "../slice";
 import { put, select } from "redux-saga/effects";
 export function* handleUpdateRequest(action) {
   try {
-    const userState = yield select();
-    const updatedUsers = userState?.user?.Users.map((user) => {
+    const userData = yield select(getUserList);
+    const updatedUsers = userData.map((user) => {
       if (user.email === action.payload.email) {
         return {
           ...user,
@@ -15,5 +16,6 @@ export function* handleUpdateRequest(action) {
       return user;
     });
     yield put(updateUser(updatedUsers));
+    yield put(setMessage(` "${action.payload.email}"  has been updated `));
   } catch (error) {}
 }

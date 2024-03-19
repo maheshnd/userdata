@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   Users: [],
-  popupAction: "",
   currentSelectedUser: "",
-  errorMessage: "",
+  message: "",
   currentUser: "",
+  currentAction: "",
 };
 
 const userSlice = createSlice({
@@ -15,34 +15,36 @@ const userSlice = createSlice({
     handleCreateUser(state, action) {},
     addUser(state, action) {
       state.Users.push(action.payload);
-    },
-    setPopupAction(state, action) {
-      state.popupAction = action.payload;
+      state.message = ` "${action.payload.email}"  has been added`;
     },
     setCurrentSelectedUser(state, action) {
       state.currentSelectedUser = action.payload;
     },
-    seterrorMessage(state, action) {
-      state.errorMessage = action.payload;
+    setMessage(state, action) {
+      state.message = action.payload;
     },
     handleUpdate(state, action) {},
     handleDelete(state, action) {},
     updateUser(state, action) {
       state.Users = [];
       state.Users = action.payload;
+      state.message = ` "${action.payload.email}"  has been updated`;
+    },
+    setCurrentAction(state, action) {
+      state.currentAction = action.payload;
     },
   },
 });
 
 export const {
   addUser,
-  setPopupAction,
   setCurrentSelectedUser,
   handleCreateUser,
-  seterrorMessage,
+  setMessage,
   handleUpdate,
   updateUser,
   handleDelete,
+  setCurrentAction,
 } = userSlice.actions;
 
 export default userSlice.reducer;

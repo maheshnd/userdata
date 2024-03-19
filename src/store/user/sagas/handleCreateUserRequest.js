@@ -1,15 +1,16 @@
 import { put, select } from "redux-saga/effects";
-import { addUser, seterrorMessage } from "../slice";
+import { addUser, setMessage } from "../slice";
+import { getUserList } from "../../../selectors/getUserList";
 
 export function* handleCreateUserRequest(action) {
   try {
     const currentUser = action.payload;
-    const userState = yield select();
-    const isUserExist = userState?.user?.Users?.some(
+    const userData = yield select(getUserList);
+    const isUserExist = userData?.some(
       (user) => user.email === currentUser.email
     );
     if (isUserExist) {
-      yield put(seterrorMessage(currentUser.email + " already exists"));
+      yield put(setMessage(` "${currentUser.email}" already exists `));
       return;
     }
     yield put(addUser(currentUser));
