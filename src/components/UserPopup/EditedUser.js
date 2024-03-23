@@ -16,6 +16,8 @@ export const EditedUser = () => {
   const shouldOpen = useSelector(shouldOpenEditPopup);
   const currentSelectedUser = useSelector(getCurrentSelectedUser);
   const [editedUser, setEditedUser] = useState({});
+  const [errors, setErrors] = useState({});
+
   useEffect(() => {
     const editedUser = userList?.find(
       (user) => user.email === currentSelectedUser
@@ -31,9 +33,23 @@ export const EditedUser = () => {
     setEditedUser({ ...editedUser, [name]: value });
   };
 
+  const validateForm = () => {
+    const errors = {};
+    if (!editedUser.firstName.trim()) {
+      errors.firstName = "First name is required";
+    }
+    if (!editedUser.lastName.trim()) {
+      errors.lastName = "Last name is required";
+    }
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleUpdateData = () => {
-    dispatch(handleUpdate(editedUser));
-    handleClose();
+    if (validateForm()) {
+      dispatch(handleUpdate(editedUser));
+      handleClose();
+    }
   };
 
   const handleClose = () => {
@@ -55,7 +71,11 @@ export const EditedUser = () => {
               name="firstName"
               value={editedUser.firstName}
               onChange={handleChange}
+              isInvalid={!!errors.firstName}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.firstName}
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId="formLastName">
             <Form.Label>Last Name</Form.Label>
@@ -64,7 +84,11 @@ export const EditedUser = () => {
               name="lastName"
               value={editedUser.lastName}
               onChange={handleChange}
+              isInvalid={!!errors.lastName}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.lastName}
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId="formEmail">
             <Form.Label>Email</Form.Label>
