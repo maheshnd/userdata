@@ -33,7 +33,7 @@ To run this project locally, follow these steps:
    ```bash
    git clone https://github.com/maheshnd/userdata.git
    
-2. Navigate to the project directory::
+2. Navigate to the project directory:
 
    ```bash
    cd userdata
