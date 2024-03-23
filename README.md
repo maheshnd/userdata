@@ -4,7 +4,8 @@ This is a simple user data management app built with React and Redux. It allows 
 
 ## Live Demo
 
-Click <a href="https://maheshnd.github.io/userdata/" target="_blank">here</a> to view the live demo of the application.
+Click <a href="https://maheshnd.github.io/userdata/" onclick="window.open(this.href, '_blank'); return false;">here</a> to view the live demo of the application.
+
 
 
 ## Features
