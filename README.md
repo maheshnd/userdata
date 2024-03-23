@@ -32,8 +32,21 @@ To run this project locally, follow these steps:
 
    ```bash
    git clone https://github.com/maheshnd/userdata.git
+   
+2. Navigate to the project directory::
+
+   ```bash
    cd userdata
+   
+3. Install dependencies:
+   ```bash
    npm install
+   
+4. Start the development server:
+   
+   ```bash
    npm start
+   
+5. Open http://localhost:3000
 
 
