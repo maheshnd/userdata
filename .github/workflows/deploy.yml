@@ -3,7 +3,7 @@ name: React CI
 on:
   push:
     branches:
-      - "main"
+      - "*"
 
 jobs:
   build:
@@ -11,10 +11,15 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [latest]
+        node-version: [15.x]
 
     steps:
-      - uses: actions/checkout@v1
+      - if: github.ref == 'refs/heads/main'
+        uses: actions/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - run: npm install
       - run: npm run build
       - uses: jakejarvis/s3-sync-action@master
