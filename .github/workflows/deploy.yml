@@ -19,7 +19,7 @@ jobs:
           npm run build
 
       - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@v4
+        uses: jakejarvis/s3-sync-action@v3
         with:
           args: --acl public-read --delete
         env:
