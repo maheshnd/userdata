@@ -19,7 +19,7 @@ jobs:
           npm run build
 
       - name: Change directory to build
-        run: cd build
+        uses: actions/checkout@build
 
       - name: S3 Sync
         uses: jakejarvis/s3-sync-action@v0.5.1
