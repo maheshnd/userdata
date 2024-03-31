@@ -16,9 +16,8 @@ jobs:
       - name: Install dependencies and build
         run: |
           npm install
-          npm run 
+          npm run build
           cd build
-
       - name: S3 Sync
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
