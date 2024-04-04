@@ -1,32 +1,37 @@
-name: React CI
-
+name: Build and Deploy to S3
 on:
   push:
     branches:
-      - "*"
+      - main # Trigger on direct pushes to main branch
+  pull_request:
+    branches:
+      - main # Trigger on pull requests targeting the main branch
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [15.x]
-
     steps:
-      - if: github.ref == 'refs/heads/main'
-        uses: actions/checkout@v1
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - run: npm install
-      - run: npm run build
-      - uses: jakejarvis/s3-sync-action@master
+          node-version: "14" # Set a Node.js version
+
+      - name: Install Dependencies
+        run: npm ci # Use `npm ci` for faster, reproducible builds
+
+      - name: Build
+        run: npm run build # Your build command here
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          args: --acl public-read --follow-symlinks --delete
-        env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: "build"
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2 # Set your AWS region here
+
+      - name: Sync to S3
+        run: aws s3 sync build/ s3://${{ secrets.AWS_S3_BUCKET }} # Use the secret here
