@@ -2,15 +2,20 @@ name: Build and Deploy to S3
 on:
   push:
     branches:
-      - main # Trigger on direct pushes to main branch
+      - main
   pull_request:
-    branches:
-      - main # Trigger on pull requests targeting the main branch
+    types:
+      - closed
 
 jobs:
   build-and-deploy:
+    if: >
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'main' ||
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
