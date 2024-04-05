@@ -7,7 +7,7 @@ export const UserData = () => {
   return (
     <>
       <Container>
-        <h2>User's Data</h2>
+        <h2>User's Data:</h2>
         <hr className="my-4" />
         <CreateUser />
         <hr className="my-4" />
